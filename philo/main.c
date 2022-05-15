@@ -6,7 +6,7 @@
 /*   By: mahmad-j <mahmad-j@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 00:31:52 by mahmad-j          #+#    #+#             */
-/*   Updated: 2022/05/05 18:29:44 by mahmad-j         ###   ########.fr       */
+/*   Updated: 2022/05/15 17:05:40 by mahmad-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ pthread_mutex_t	*init_fork(t_info *info)
 {
 	pthread_mutex_t	*mutex_fork;
 	int				i;
-	
+
 	i = 0;
 	mutex_fork = malloc(sizeof(pthread_mutex_t) * info->philo_count);
 	if (!mutex_fork)
@@ -85,7 +85,7 @@ t_info	*init_info(int ac, char **av)
 int	valid_args(int ac, char **av)
 {
 	int	i;
-	
+
 	i = 1;
 	if (ac < 5 || ac > 6)
 	{
@@ -104,22 +104,6 @@ int	valid_args(int ac, char **av)
 	return (1);
 }
 
-void	join_thread(t_info *info)
-{
-	int	i;
-
-	i = 0;
-	while (i < info->philo_count)
-	{
-		pthread_join(info->philo[i]->philo_thread, NULL);
-		pthread_join(info->philo[i]->check_thread, NULL);
-		i++;
-	}
-	pthread_mutex_unlock(&info->mutex_write);
-	clear_mem(info);
-	printf("--Clear Mem\n");
-}
-
 int	main(int ac, char **av)
 {
 	t_info	*info;
@@ -133,7 +117,7 @@ int	main(int ac, char **av)
 	info->start_time = get_time();
 	start_philo(info);
 	while (info->finish)
-		continue;
+		continue ;
 	join_thread(info);
 	return (0);
 }

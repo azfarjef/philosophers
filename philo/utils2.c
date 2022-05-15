@@ -6,7 +6,7 @@
 /*   By: mahmad-j <mahmad-j@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 10:59:49 by mahmad-j          #+#    #+#             */
-/*   Updated: 2022/05/05 18:33:04 by mahmad-j         ###   ########.fr       */
+/*   Updated: 2022/05/13 21:21:23 by mahmad-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,21 @@ void	print_state(t_info *info, int philo_num, char *message)
 {
 	pthread_mutex_lock(&info->mutex_write);
 	if (info->finish != 0)
-		printf("%d %d %s\n", get_time() - info->start_time, philo_num + 1, message);
-	// if (message[0] != 'd')
-	// 	pthread_mutex_unlock(&info->mutex_write);
+		printf("%d %d %s\n", get_time() - info->start_time, philo_num + 1,
+			message);
 	pthread_mutex_unlock(&info->mutex_write);
+}
+
+void	join_thread(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (i < info->philo_count)
+	{
+		pthread_join(info->philo[i]->philo_thread, NULL);
+		pthread_join(info->philo[i]->check_thread, NULL);
+		i++;
+	}
+	clear_mem(info);
 }

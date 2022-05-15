@@ -6,7 +6,7 @@
 /*   By: mahmad-j <mahmad-j@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 00:32:22 by mahmad-j          #+#    #+#             */
-/*   Updated: 2022/05/02 13:24:52 by mahmad-j         ###   ########.fr       */
+/*   Updated: 2022/05/13 21:22:02 by mahmad-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdint.h>
 # include <sys/time.h>
 
-typedef struct	s_philo
+typedef struct s_philo
 {
 	pthread_t		philo_thread;
 	pthread_t		check_thread;
@@ -45,7 +45,7 @@ typedef struct s_info
 	int				finish;
 	pthread_mutex_t	mutex_write;
 	pthread_mutex_t	*mutex_fork;
-	t_philo			**philo;	
+	t_philo			**philo;
 }				t_info;
 
 int				valid_args(int ac, char **av);
@@ -65,5 +65,6 @@ int				get_time(void);
 void			clear_mem(t_info *info);
 void			ft_usleep(int	time_ms);
 void			print_state(t_info *info, int philo_num, char *message);
+void			join_thread(t_info *info);
 
 #endif
