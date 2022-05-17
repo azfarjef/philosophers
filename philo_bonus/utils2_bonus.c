@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   utils2_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mahmad-j <mahmad-j@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 10:59:49 by mahmad-j          #+#    #+#             */
-/*   Updated: 2022/05/17 05:01:07 by mahmad-j         ###   ########.fr       */
+/*   Updated: 2022/05/17 11:37:36 by mahmad-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 void	ft_usleep(int time_ms)
 {
@@ -24,23 +24,22 @@ void	ft_usleep(int time_ms)
 
 void	print_state(t_info *info, int philo_num, char *message)
 {
-	pthread_mutex_lock(&info->mutex_write);
-	if (info->finish != 0)
-		printf("%d %d %s\n", get_time() - info->start_time, philo_num + 1,
-			message);
-	pthread_mutex_unlock(&info->mutex_write);
+	sem_wait(info->sem_write);
+	printf("%d %d %s\n", get_time() - info->start_time, philo_num + 1, message);
+	if (message[0] != 'd')
+		sem_post(info->sem_write);
 }
 
-void	join_thread(t_info *info)
+void	close_processes(t_info *info)
 {
 	int	i;
+	int	status;
 
 	i = 0;
-	while (i < info->philo_count)
+	waitpid(-1, &status, 0);
+	if (WIFEXITED(status) || WIFSIGNALED(status))
 	{
-		pthread_join(info->philo[i]->philo_thread, NULL);
-		pthread_join(info->philo[i]->check_thread, NULL);
-		i++;
+		while (i < info->philo_count)
+			kill(info->philo[i++]->philo_pid, SIGKILL);
 	}
-	clear_mem(info);
 }
